@@ -9,8 +9,51 @@
           "kind": "build",
           "isDefault": true
         },
-        "problemMatcher": ["$gcc"],
+        "problemMatcher": [
+          "$gcc"
+        ],
         "detail": "Build SRS by cmake."
+      },
+      {
+        "type": "docker-build",
+        "label": "docker-build",
+        "platform": "node",
+        "dockerBuild": {
+          "dockerfile": "${workspaceFolder}/trunk/3rdparty/srs-bench/vendor/github.com/pion/webrtc/v3/Dockerfile",
+          "context": "${workspaceFolder}/trunk/3rdparty/srs-bench/vendor/github.com/pion/webrtc/v3",
+          "pull": true
+        },
+        "node": {
+          "package": "${workspaceFolder}/trunk/3rdparty/srs-bench/vendor/github.com/pion/webrtc/v3/package.json"
+        }
+      },
+      {
+        "type": "docker-run",
+        "label": "docker-run: release",
+        "dependsOn": [
+          "docker-build"
+        ],
+        "platform": "node",
+        "node": {
+          "package": "${workspaceFolder}/trunk/3rdparty/srs-bench/vendor/github.com/pion/webrtc/v3/package.json"
+        }
+      },
+      {
+        "type": "docker-run",
+        "label": "docker-run: debug",
+        "dependsOn": [
+          "docker-build"
+        ],
+        "dockerRun": {
+          "env": {
+            "DEBUG": "*",
+            "NODE_ENV": "development"
+          }
+        },
+        "node": {
+          "package": "${workspaceFolder}/trunk/3rdparty/srs-bench/vendor/github.com/pion/webrtc/v3/package.json",
+          "enableDebugging": true
+        }
       }
     ]
   }

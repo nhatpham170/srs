@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+  webrtc:
+    image: webrtc
+    build:
+      context: trunk/3rdparty/srs-bench/vendor/github.com/pion/webrtc/v3
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000
